@@ -1,6 +1,7 @@
 package com.hemebiotech.analytics;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,25 +24,35 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 	}
 	
 	@Override
-	public List<String> GetSymptoms() {
+	public List<String> getSymptoms() {
 		ArrayList<String> result = new ArrayList<String>();
-		
+
 		if (filepath != null) {
+			BufferedReader reader = null;
 			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
-				String line = reader.readLine();
+				reader = new BufferedReader (new FileReader(filepath));
+				String line = null;
 				
-				while (line != null) {
+				while ((line = reader.readLine()) != null) {
 					result.add(line);
-					line = reader.readLine();
 				}
-				reader.close();
+
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				close(reader);
 			}
 		}
-		
 		return result;
+	}
+
+	private void close(Closeable c) {
+		if (c == null) return;
+		try {
+			c.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 
 }
