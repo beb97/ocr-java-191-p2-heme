@@ -43,6 +43,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 				close(reader);
 			}
 		}
+
 		return result;
 	}
 

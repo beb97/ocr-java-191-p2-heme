@@ -1,7 +1,6 @@
 package com.hemebiotech.analytics;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,24 +17,22 @@ public class AnalyticsCounter {
 
 	//* récupérer les strings d’un fichier,
 	public List<String> getListSymptoms() {
-		List<String> symptoms = new ArrayList<String>();
-
 		ISymptomReader reader = new ReadSymptomDataFromFile(inputFile);
-		symptoms = reader.getSymptoms();
-
-		return symptoms;
+		return reader.getSymptoms();
 	}
 
+	//* compter les occurrences d’une liste de symptomes
 	public Map<String, Integer> countSymptoms(List<String> symptomsList) {
+		// Choix d'un treemap car les clés sont triées
 		Map<String, Integer> symptoms = new TreeMap<String, Integer>();
 
 		for(String line : symptomsList) {
+			// si la ligne contient déjà la ligne, on incrémente le compteur qui est associé
 			if ( symptoms.containsKey(line) ) {
-				// si la ligne contient déjà la ligne, on incrémente le compteur qui est associé
 				symptoms.put(line, symptoms.get(line)+1);
 			}
+			// sinon on ajoute l'association en initialisant le compteur à 1
 			else {
-				// sinon on ajoute l'association en initialisant le compteur à 1
 				symptoms.put(line, 1);
 			}
 		}
@@ -47,6 +44,7 @@ public class AnalyticsCounter {
 		//Deja fait par le countSymptoms (usage d'un TREEMAP)
 	}
 
+	//* ressortir dans un fichier txt les symptomes et leur quantité
 	public void writeResult(Map<String, Integer> symptoms) {
 		FileWriter writer = null;
 		try {
